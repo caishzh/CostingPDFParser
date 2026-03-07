@@ -40,6 +40,9 @@ models/
 *.pdmodel
 *.pdiparams
 
+# Test files - 不提交测试文件
+test/
+
 # PDF and Images
 *.pdf
 *.png
