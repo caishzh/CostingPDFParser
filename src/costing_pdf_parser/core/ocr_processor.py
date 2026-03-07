@@ -14,6 +14,8 @@ logger = logging.getLogger(__name__)
 
 
 class OCRProcessor:
+    """OCR处理器，封装PaddleOCR和PP-StructureV2的功能。"""
+
     def __init__(self):
         self.ocr = None
         self._init_ocr()

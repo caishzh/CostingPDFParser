@@ -7,6 +7,8 @@ logger = logging.getLogger(__name__)
 
 
 class InvoiceParser(BaseParser):
+    """发票解析器。"""
+
     @property
     def doc_type(self):
         return "invoice"

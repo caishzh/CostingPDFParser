@@ -7,6 +7,8 @@ logger = logging.getLogger(__name__)
 
 
 class POParser(BaseParser):
+    """采购订单(PO)解析器。"""
+
     @property
     def doc_type(self):
         return "po"

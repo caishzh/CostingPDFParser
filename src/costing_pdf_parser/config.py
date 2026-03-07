@@ -2,6 +2,8 @@ import os
 
 
 class Config:
+    """全局配置类，集中管理项目所有配置参数。"""
+
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
     OCR_USE_GPU = False

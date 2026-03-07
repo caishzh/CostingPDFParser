@@ -1,3 +1,5 @@
+"""Costing PDF Parser - 模块化PDF解析工具。"""
+
 import os
 
 os.environ.setdefault("PADDLE_PDX_DISABLE_MODEL_SOURCE_CHECK", "True")

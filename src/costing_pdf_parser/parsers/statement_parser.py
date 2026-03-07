@@ -7,6 +7,8 @@ logger = logging.getLogger(__name__)
 
 
 class StatementParser(BaseParser):
+    """对账单解析器。"""
+
     @property
     def doc_type(self):
         return "statement"

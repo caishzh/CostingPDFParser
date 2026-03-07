@@ -13,6 +13,8 @@ logger = logging.getLogger(__name__)
 
 
 class SealExtractor:
+    """印章提取器，基于OpenCV和PP-OCR提取红色印章。"""
+
     def __init__(self):
         self.ocr = None
         self._init_ocr()
