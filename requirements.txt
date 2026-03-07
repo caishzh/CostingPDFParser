@@ -1,0 +1,13 @@
+# PDF处理
+PyMuPDF>=1.23.0
+
+# 图像处理
+opencv-python>=4.8.0
+numpy>=1.24.0
+
+# PaddleOCR - CPU版本
+paddlepaddle>=2.5.0
+paddleocr>=2.7.0
+
+# 其他工具
+Pillow>=10.0.0
