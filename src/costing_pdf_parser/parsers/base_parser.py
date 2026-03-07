@@ -2,12 +2,8 @@ import logging
 from abc import ABC, abstractmethod
 from typing import Dict, Any, List
 
-try:
-    from ..core.ocr_processor import OCRProcessor
-    from ..core.seal_extractor import SealExtractor
-except ImportError:
-    from core.ocr_processor import OCRProcessor
-    from core.seal_extractor import SealExtractor
+from ..core.ocr_processor import OCRProcessor
+from ..core.seal_extractor import SealExtractor
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
