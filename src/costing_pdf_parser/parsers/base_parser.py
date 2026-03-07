@@ -14,8 +14,20 @@ logger = logging.getLogger(__name__)
 
 class BaseParser(ABC):
     def __init__(self):
-        self.ocr_processor = OCRProcessor()
-        self.seal_extractor = SealExtractor()
+        self._ocr_processor = None
+        self._seal_extractor = None
+    
+    @property
+    def ocr_processor(self):
+        if self._ocr_processor is None:
+            self._ocr_processor = OCRProcessor()
+        return self._ocr_processor
+    
+    @property
+    def seal_extractor(self):
+        if self._seal_extractor is None:
+            self._seal_extractor = SealExtractor()
+        return self._seal_extractor
     
     def parse(self, pdf_path):
         result = {
