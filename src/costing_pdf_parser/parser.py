@@ -1,8 +1,14 @@
 import logging
 from typing import Dict, Any
-from parsers.po_parser import POParser
-from parsers.invoice_parser import InvoiceParser
-from parsers.statement_parser import StatementParser
+
+try:
+    from .parsers.po_parser import POParser
+    from .parsers.invoice_parser import InvoiceParser
+    from .parsers.statement_parser import StatementParser
+except ImportError:
+    from parsers.po_parser import POParser
+    from parsers.invoice_parser import InvoiceParser
+    from parsers.statement_parser import StatementParser
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

@@ -3,9 +3,15 @@ import sys
 import logging
 from typing import List, Dict, Any
 from paddleocr import PaddleOCR
-from config import Config
-from utils.pdf_utils import pdf_to_images
-from utils.image_utils import preprocess_image, resize_image
+
+try:
+    from ..config import Config
+    from ..utils.pdf_utils import pdf_to_images
+    from ..utils.image_utils import preprocess_image, resize_image
+except ImportError:
+    from config import Config
+    from utils.pdf_utils import pdf_to_images
+    from utils.image_utils import preprocess_image, resize_image
 
 logging.basicConfig(level=getattr(logging, Config.LOG_LEVEL))
 logger = logging.getLogger(__name__)

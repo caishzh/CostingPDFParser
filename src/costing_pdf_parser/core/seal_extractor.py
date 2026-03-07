@@ -3,8 +3,13 @@ import numpy as np
 import logging
 from typing import Dict, Any, Optional
 from paddleocr import PaddleOCR
-from config import Config
-from utils.pdf_utils import pdf_to_cv2
+
+try:
+    from ..config import Config
+    from ..utils.pdf_utils import pdf_to_cv2
+except ImportError:
+    from config import Config
+    from utils.pdf_utils import pdf_to_cv2
 
 logging.basicConfig(level=getattr(logging, Config.LOG_LEVEL))
 logger = logging.getLogger(__name__)
