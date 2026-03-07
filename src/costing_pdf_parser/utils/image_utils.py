@@ -1,12 +1,14 @@
 import cv2
 import numpy as np
 
+
 def preprocess_image(img):
     if len(img.shape) == 2:
         img = cv2.cvtColor(img, cv2.COLOR_GRAY2RGB)
     elif img.shape[2] == 4:
         img = cv2.cvtColor(img, cv2.COLOR_RGBA2RGB)
     return img
+
 
 def resize_image(img, max_size=2048):
     h, w = img.shape[:2]
