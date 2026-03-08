@@ -1,4 +1,9 @@
 import logging
+import os
+
+os.environ["FLAGS_use_mkldnn"] = "False"
+os.environ["FLAGS_use_ngraph"] = "False"
+
 from typing import Any, Dict, Optional
 
 import cv2
@@ -21,7 +26,10 @@ class SealExtractor:
 
     def _init_ocr(self):
         try:
-            self.ocr = PaddleOCR(use_angle_cls=True, lang="ch")
+            self.ocr = PaddleOCR(
+                use_angle_cls=False,
+                lang="ch",
+            )
             logger.info("印章OCR初始化成功")
         except Exception as e:
             try:
@@ -186,7 +194,7 @@ class SealExtractor:
         }
 
         try:
-            ocr_output = self.ocr.ocr(seal_img, cls=True)
+            ocr_output = self.ocr.ocr(seal_img)
 
             if ocr_output and ocr_output[0]:
                 texts = []

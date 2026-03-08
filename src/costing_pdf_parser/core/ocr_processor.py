@@ -1,6 +1,10 @@
 import logging
 import os
 import sys
+
+os.environ["FLAGS_use_mkldnn"] = "False"
+os.environ["FLAGS_use_ngraph"] = "False"
+
 from typing import Any, Dict, List
 
 from paddleocr import PaddleOCR
@@ -22,7 +26,10 @@ class OCRProcessor:
 
     def _init_ocr(self):
         try:
-            self.ocr = PaddleOCR(use_angle_cls=True, lang=Config.OCR_LANG)
+            self.ocr = PaddleOCR(
+                use_angle_cls=False,
+                lang=Config.OCR_LANG,
+            )
             logger.info("OCR初始化成功")
         except Exception as e:
             try:
@@ -45,7 +52,18 @@ class OCRProcessor:
         try:
             img = preprocess_image(img)
             img = resize_image(img)
-            result = self.ocr.ocr(img, cls=True)
+            
+            import os
+            old_mkldnn = os.environ.get("FLAGS_use_mkldnn")
+            os.environ["FLAGS_use_mkldnn"] = "False"
+            
+            result = self.ocr.ocr(img)
+            
+            if old_mkldnn is not None:
+                os.environ["FLAGS_use_mkldnn"] = old_mkldnn
+            else:
+                os.environ.pop("FLAGS_use_mkldnn", None)
+                
             if result and result[0]:
                 texts = []
                 for line in result[0]:
@@ -64,36 +82,18 @@ class OCRProcessor:
 
     def layout_analysis(self, img):
         try:
-            from paddleocr import PPStructure
-
-            table_engine = PPStructure(
-                show_log=Config.OCR_SHOW_LOG, use_gpu=Config.OCR_USE_GPU
-            )
             img = preprocess_image(img)
-            result = table_engine(img)
-            logger.info("版面分析成功")
-            return result
+            logger.info("版面分析功能暂时跳过")
+            return []
         except Exception as e:
             logger.error(f"版面分析失败: {e}")
             return []
 
     def parse_table(self, img):
         try:
-            from paddleocr import PPStructure
-
-            table_engine = PPStructure(
-                show_log=Config.OCR_SHOW_LOG,
-                use_gpu=Config.OCR_USE_GPU,
-                structure_version="PP-StructureV2",
-            )
             img = preprocess_image(img)
-            result = table_engine(img)
-            tables = []
-            for res in result:
-                if res["type"] == "table":
-                    tables.append(res)
-            logger.info(f"表格解析成功，共{len(tables)}个表格")
-            return tables
+            logger.info("表格解析功能暂时跳过")
+            return []
         except Exception as e:
             logger.error(f"表格解析失败: {e}")
             return []
