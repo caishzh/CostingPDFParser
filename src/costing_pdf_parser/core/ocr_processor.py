@@ -22,19 +22,15 @@ class OCRProcessor:
 
     def _init_ocr(self):
         try:
-            self.ocr = PaddleOCR(
-                use_angle_cls=True,
-                lang=Config.OCR_LANG,
-                use_gpu=Config.OCR_USE_GPU,
-                show_log=Config.OCR_SHOW_LOG,
-                det_model_dir=Config.OCR_DET_MODEL_DIR,
-                rec_model_dir=Config.OCR_REC_MODEL_DIR,
-                cls_model_dir=Config.OCR_CLS_MODEL_DIR,
-            )
+            self.ocr = PaddleOCR(use_angle_cls=True, lang=Config.OCR_LANG)
             logger.info("OCR初始化成功")
         except Exception as e:
-            logger.error(f"OCR初始化失败: {e}")
-            raise
+            try:
+                self.ocr = PaddleOCR(lang=Config.OCR_LANG)
+                logger.info("OCR初始化成功（最简参数）")
+            except Exception as e2:
+                logger.error(f"OCR初始化失败: {e2}")
+                raise
 
     def pdf_to_images(self, pdf_path, dpi=200):
         try:

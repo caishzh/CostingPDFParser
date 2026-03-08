@@ -21,13 +21,15 @@ class SealExtractor:
 
     def _init_ocr(self):
         try:
-            self.ocr = PaddleOCR(
-                use_angle_cls=True, lang="ch", use_gpu=False, show_log=False
-            )
+            self.ocr = PaddleOCR(use_angle_cls=True, lang="ch")
             logger.info("印章OCR初始化成功")
         except Exception as e:
-            logger.error(f"印章OCR初始化失败: {e}")
-            raise
+            try:
+                self.ocr = PaddleOCR(lang="ch")
+                logger.info("印章OCR初始化成功（最简参数）")
+            except Exception as e2:
+                logger.error(f"印章OCR初始化失败: {e2}")
+                raise
 
     def extract(self, pdf_path):
         result = {
