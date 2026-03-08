@@ -38,38 +38,136 @@ CostingPDFParser/
 
 ## 快速开始
 
-### 1. 克隆仓库
+### 前置条件（新手必读）
+
+在开始之前，请确保你的电脑上已经安装了：
+
+1. **Python 3.8 或更高版本**
+   - 下载地址：https://www.python.org/downloads/
+   - 安装时请勾选 "Add Python to PATH"
+   - 验证安装：打开终端（Windows 按 Win+R，输入 cmd），输入 `python --version` 或 `python3 --version`
+
+2. **Git**
+   - 下载地址：https://git-scm.com/downloads
+   - 验证安装：打开终端，输入 `git --version`
+
+---
+
+### 步骤 1：克隆项目代码
+
+打开终端，输入以下命令：
 
 ```bash
 git clone https://github.com/caishzh/CostingPDFParser.git
 cd CostingPDFParser
 ```
 
-### 2. 安装依赖（推荐）
+> 说明：
+> - `git clone` 会把代码下载到你的电脑上
+> - `cd CostingPDFParser` 会进入项目文件夹
 
-使用可编辑安装模式，支持全局导入：
+---
+
+### 步骤 2：创建虚拟环境（推荐，新手友好）
+
+虚拟环境可以避免依赖冲突，建议新手使用：
+
+**Windows 用户：**
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+**macOS/Linux 用户：**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+> 成功激活后，终端前面会显示 `(venv)` 字样
+
+---
+
+### 步骤 3：安装依赖（推荐方法）
 
 ```bash
 pip install -e .
 ```
 
-### 2. 备选安装方法
+> 说明：
+> - `-e` 表示可编辑模式，修改代码后不需要重新安装
+> - `.` 表示当前目录（即 pyproject.toml 所在目录）
+> - 安装过程中会自动下载所有需要的库（包括 PaddleOCR）
 
-如果上面的方法有问题，可以使用 requirements.txt 安装：
-
+**如果上面的方法失败，使用备选方法：**
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. 一行代码使用
+---
+
+### 步骤 4：运行测试
+
+#### 4.1 测试安装是否成功
+
+在终端中输入：
+```bash
+python -c "from costing_pdf_parser import Parser; print('安装成功！')"
+```
+
+如果看到 "安装成功！"，说明安装没问题。
+
+#### 4.2 解析你的第一个 PDF
+
+在项目根目录下创建一个名为 `test_my_pdf.py` 的文件，内容如下：
 
 ```python
 from costing_pdf_parser import Parser
 
-parser = Parser()
-result = parser.parse("your_file.pdf", doc_type="po")
-print(result)
+def main():
+    print("开始解析 PDF...")
+    
+    parser = Parser()
+    
+    pdf_path = "你的PDF文件路径.pdf"
+    doc_type = "po"
+    
+    result = parser.parse(pdf_path, doc_type=doc_type)
+    
+    print("\n解析结果：")
+    print(result)
+
+if __name__ == "__main__":
+    main()
 ```
+
+然后运行：
+```bash
+python test_my_pdf.py
+```
+
+---
+
+### 常见问题（新手必看）
+
+**Q: 提示 "python 不是内部或外部命令" 怎么办？**
+A: 说明 Python 没有添加到 PATH，请重新安装 Python 并勾选 "Add Python to PATH"。
+
+**Q: 安装 PaddleOCR 很慢怎么办？**
+A: 使用国内镜像源加速：
+```bash
+pip install -e . -i https://pypi.tuna.tsinghua.edu.cn/simple
+```
+
+**Q: 提示 "ModuleNotFoundError"？**
+A: 确保虚拟环境已激活（终端前有 `(venv)`），然后重新运行安装命令。
+
+**Q: Windows 下激活虚拟环境报错？**
+A: 打开 PowerShell（管理员），输入：
+```powershell
+Set-ExecutionPolicy RemoteSigned
+```
+然后重新尝试激活。
 
 ## 支持的单据类型
 
