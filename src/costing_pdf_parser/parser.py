@@ -14,7 +14,7 @@ class Parser:
 
     示例用法:
         >>> from costing_pdf_parser import Parser
-        >>> parser = Parser()
+        >>> parser = Parser(use_onednn=False)
         >>> result = parser.parse("po.pdf", doc_type="po")
     """
 
@@ -24,7 +24,8 @@ class Parser:
         "statement": StatementParser,
     }
 
-    def __init__(self):
+    def __init__(self, use_onednn: bool = None):
+        self.use_onednn = use_onednn
         self._parser_instances = {}
 
     def parse(self, file_path: str, doc_type: str = "po") -> Dict[str, Any]:
@@ -46,7 +47,7 @@ class Parser:
             )
 
         if doc_type not in self._parser_instances:
-            self._parser_instances[doc_type] = self._PARSERS[doc_type]()
+            self._parser_instances[doc_type] = self._PARSERS[doc_type](use_onednn=self.use_onednn)
 
         parser = self._parser_instances[doc_type]
         return parser.parse(file_path)

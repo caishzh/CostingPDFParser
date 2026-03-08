@@ -1,9 +1,6 @@
 import logging
 import os
 
-os.environ["FLAGS_use_mkldnn"] = "False"
-os.environ["FLAGS_use_ngraph"] = "False"
-
 from typing import Any, Dict, Optional
 
 import cv2
@@ -17,15 +14,31 @@ logging.basicConfig(level=getattr(logging, Config.LOG_LEVEL))
 logger = logging.getLogger(__name__)
 
 
+def _set_onednn_env(use_onednn: bool):
+    """设置 oneDNN 相关环境变量。"""
+    if use_onednn:
+        os.environ.pop("FLAGS_use_mkldnn", None)
+        os.environ.pop("FLAGS_enable_onednn_ops", None)
+        os.environ.pop("FLAGS_enable_onednn", None)
+        os.environ.pop("FLAGS_onednn_ops_list", None)
+    else:
+        os.environ["FLAGS_use_mkldnn"] = "False"
+        os.environ["FLAGS_enable_onednn_ops"] = "False"
+        os.environ["FLAGS_enable_onednn"] = "False"
+        os.environ["FLAGS_onednn_ops_list"] = ""
+
+
 class SealExtractor:
     """印章提取器，基于OpenCV和PP-OCR提取红色印章。"""
 
-    def __init__(self):
+    def __init__(self, use_onednn: bool = None):
+        self.use_onednn = use_onednn if use_onednn is not None else Config.OCR_USE_ONEDNN
         self.ocr = None
         self._init_ocr()
 
     def _init_ocr(self):
         try:
+            _set_onednn_env(self.use_onednn)
             self.ocr = PaddleOCR(
                 use_angle_cls=False,
                 lang="ch",

@@ -7,6 +7,7 @@ class Config:
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
     OCR_USE_GPU = False
+    OCR_USE_ONEDNN = False
     OCR_LANG = "ch"
     OCR_DET_MODEL_DIR = None
     OCR_REC_MODEL_DIR = None

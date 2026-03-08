@@ -17,7 +17,8 @@ class BaseParser(ABC):
         - _extract_fields() 方法: 从OCR结果中提取字段
     """
 
-    def __init__(self):
+    def __init__(self, use_onednn: bool = None):
+        self.use_onednn = use_onednn
         self._ocr_processor = None
         self._seal_extractor = None
 
@@ -25,14 +26,14 @@ class BaseParser(ABC):
     def ocr_processor(self):
         """OCR处理器实例（延迟初始化）。"""
         if self._ocr_processor is None:
-            self._ocr_processor = OCRProcessor()
+            self._ocr_processor = OCRProcessor(use_onednn=self.use_onednn)
         return self._ocr_processor
 
     @property
     def seal_extractor(self):
         """印章提取器实例（延迟初始化）。"""
         if self._seal_extractor is None:
-            self._seal_extractor = SealExtractor()
+            self._seal_extractor = SealExtractor(use_onednn=self.use_onednn)
         return self._seal_extractor
 
     def parse(self, pdf_path):

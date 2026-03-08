@@ -38,15 +38,32 @@ os.environ.setdefault("ONEDNN_VERBOSE", "0")
 os.environ.setdefault("OMP_NUM_THREADS", "1")
 os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "True")
 os.environ.setdefault("KMP_AFFINITY", "granularity=fine,compact,1,0")
-os.environ.setdefault("FLAGS_use_mkldnn", "False")
 os.environ.setdefault("FLAGS_use_ngraph", "False")
 os.environ.setdefault("FLAGS_allocator_strategy", "naive_best_fit")
-os.environ.setdefault("FLAGS_enable_onednn_ops", "False")
-os.environ.setdefault("FLAGS_enable_onednn", "False")
-os.environ.setdefault("FLAGS_onednn_ops_list", "")
 os.environ.setdefault("DNNL_VERBOSE", "0")
+
+
+def set_onednn(use_onednn: bool = False):
+    """设置是否使用 oneDNN。
+    
+    Args:
+        use_onednn: 是否使用 oneDNN，默认为 False（关闭）
+    """
+    if use_onednn:
+        os.environ.pop("FLAGS_use_mkldnn", None)
+        os.environ.pop("FLAGS_enable_onednn_ops", None)
+        os.environ.pop("FLAGS_enable_onednn", None)
+        os.environ.pop("FLAGS_onednn_ops_list", None)
+    else:
+        os.environ["FLAGS_use_mkldnn"] = "False"
+        os.environ["FLAGS_enable_onednn_ops"] = "False"
+        os.environ["FLAGS_enable_onednn"] = "False"
+        os.environ["FLAGS_onednn_ops_list"] = ""
+
+
+set_onednn(use_onednn=False)
 
 from .parser import Parser
 
 __version__ = "0.1.0"
-__all__ = ["Parser"]
+__all__ = ["Parser", "set_onednn"]

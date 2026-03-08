@@ -1,12 +1,5 @@
 import logging
 import os
-import sys
-
-os.environ["FLAGS_use_mkldnn"] = "False"
-os.environ["FLAGS_use_ngraph"] = "False"
-os.environ["FLAGS_enable_onednn_ops"] = "False"
-os.environ["FLAGS_enable_onednn"] = "False"
-os.environ["FLAGS_allocator_strategy"] = "naive_best_fit"
 
 from typing import Any, Dict, List
 
@@ -20,15 +13,31 @@ logging.basicConfig(level=getattr(logging, Config.LOG_LEVEL))
 logger = logging.getLogger(__name__)
 
 
+def _set_onednn_env(use_onednn: bool):
+    """设置 oneDNN 相关环境变量。"""
+    if use_onednn:
+        os.environ.pop("FLAGS_use_mkldnn", None)
+        os.environ.pop("FLAGS_enable_onednn_ops", None)
+        os.environ.pop("FLAGS_enable_onednn", None)
+        os.environ.pop("FLAGS_onednn_ops_list", None)
+    else:
+        os.environ["FLAGS_use_mkldnn"] = "False"
+        os.environ["FLAGS_enable_onednn_ops"] = "False"
+        os.environ["FLAGS_enable_onednn"] = "False"
+        os.environ["FLAGS_onednn_ops_list"] = ""
+
+
 class OCRProcessor:
     """OCR处理器，封装PaddleOCR和PP-StructureV2的功能。"""
 
-    def __init__(self):
+    def __init__(self, use_onednn: bool = None):
+        self.use_onednn = use_onednn if use_onednn is not None else Config.OCR_USE_ONEDNN
         self.ocr = None
         self._init_ocr()
 
     def _init_ocr(self):
         try:
+            _set_onednn_env(self.use_onednn)
             self.ocr = PaddleOCR(
                 use_angle_cls=False,
                 lang=Config.OCR_LANG,
@@ -56,16 +65,7 @@ class OCRProcessor:
             img = preprocess_image(img)
             img = resize_image(img)
             
-            import os
-            old_mkldnn = os.environ.get("FLAGS_use_mkldnn")
-            os.environ["FLAGS_use_mkldnn"] = "False"
-            
             result = self.ocr.ocr(img)
-            
-            if old_mkldnn is not None:
-                os.environ["FLAGS_use_mkldnn"] = old_mkldnn
-            else:
-                os.environ.pop("FLAGS_use_mkldnn", None)
                 
             if result and result[0]:
                 texts = []
