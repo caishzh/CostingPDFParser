@@ -14,21 +14,26 @@
 
 ```
 CostingPDFParser/
-├── config.py                    # 全局配置
+├── pyproject.toml               # 项目配置
 ├── requirements.txt             # Python依赖
-├── main.py                      # 示例入口
-├── parser.py                    # 统一调度入口
-├── core/                        # 核心模块
-│   ├── ocr_processor.py         # OCR封装类
-│   └── seal_extractor.py        # 独立印章提取类
-├── parsers/                     # 单据解析模块
-│   ├── base_parser.py           # 解析基类
-│   ├── po_parser.py             # 采购订单解析
-│   ├── invoice_parser.py        # 发票解析
-│   └── statement_parser.py      # 对账单解析
-└── utils/                       # 工具模块
-    ├── pdf_utils.py
-    └── image_utils.py
+├── README.md                    # 项目说明
+├── src/
+│   └── costing_pdf_parser/      # 核心包
+│       ├── __init__.py
+│       ├── config.py            # 全局配置
+│       ├── parser.py            # 统一调度入口
+│       ├── core/                # 核心模块
+│       │   ├── ocr_processor.py # OCR封装类
+│       │   └── seal_extractor.py # 独立印章提取类
+│       ├── parsers/             # 单据解析模块
+│       │   ├── base_parser.py   # 解析基类
+│       │   ├── po_parser.py     # 采购订单解析
+│       │   ├── invoice_parser.py # 发票解析
+│       │   └── statement_parser.py # 对账单解析
+│       └── utils/               # 工具模块
+│           ├── pdf_utils.py
+│           └── image_utils.py
+└── test/                        # 测试文件（gitignore）
 ```
 
 ## 快速开始
@@ -36,11 +41,21 @@ CostingPDFParser/
 ### 1. 克隆仓库
 
 ```bash
-git clone <your-github-repo-url>
+git clone https://github.com/caishzh/CostingPDFParser.git
 cd CostingPDFParser
 ```
 
-### 2. 安装依赖
+### 2. 安装依赖（推荐）
+
+使用可编辑安装模式，支持全局导入：
+
+```bash
+pip install -e .
+```
+
+### 2. 备选安装方法
+
+如果上面的方法有问题，可以使用 requirements.txt 安装：
 
 ```bash
 pip install -r requirements.txt
@@ -49,7 +64,7 @@ pip install -r requirements.txt
 ### 3. 一行代码使用
 
 ```python
-from parser import Parser
+from costing_pdf_parser import Parser
 
 parser = Parser()
 result = parser.parse("your_file.pdf", doc_type="po")
@@ -68,12 +83,12 @@ print(result)
 
 只需三步即可添加新的单据解析器：
 
-1. 在 `parsers/` 目录下创建新文件，继承 `BaseParser`
+1. 在 `src/costing_pdf_parser/parsers/` 目录下创建新文件，继承 `BaseParser`
 2. 实现 `doc_type` 属性和 `_extract_fields` 方法
 3. 注册到 `Parser` 类
 
 ```python
-from parsers.base_parser import BaseParser
+from costing_pdf_parser.parsers.base_parser import BaseParser
 
 class ContractParser(BaseParser):
     @property
@@ -84,13 +99,13 @@ class ContractParser(BaseParser):
         return {"field1": "value1"}
 
 # 注册新解析器
-from parser import Parser
+from costing_pdf_parser import Parser
 Parser.register_parser("contract", ContractParser)
 ```
 
 ## 配置说明
 
-编辑 `config.py` 调整参数：
+编辑 `src/costing_pdf_parser/config.py` 调整参数：
 
 ```python
 # OCR配置
