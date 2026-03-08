@@ -42,10 +42,15 @@ CostingPDFParser/
 
 在开始之前，请确保你的电脑上已经安装了：
 
-1. **Python 3.8 或更高版本**
+1. **Anaconda（推荐，包含 Python）**
+   - 下载地址：https://www.anaconda.com/download
+   - 安装完成后，**必须运行** `conda init` 初始化（Windows 安装后会自动提示）
+   - 重启终端后生效
+   - 验证安装：打开终端，输入 `conda --version` 和 `python --version`
+
+   *如果不想用 Anaconda，也可以使用官方 Python：*
    - 下载地址：https://www.python.org/downloads/
    - 安装时请勾选 "Add Python to PATH"
-   - 验证安装：打开终端（Windows 按 Win+R，输入 cmd），输入 `python --version` 或 `python3 --version`
 
 2. **Git**
    - 下载地址：https://git-scm.com/downloads
@@ -71,6 +76,20 @@ cd CostingPDFParser
 ### 步骤 2：创建虚拟环境（推荐，新手友好）
 
 虚拟环境可以避免依赖冲突，建议新手使用：
+
+**方法一：使用 Anaconda 创建虚拟环境（推荐）**
+
+```bash
+conda create -n costing-parser python=3.9
+conda activate costing-parser
+```
+
+> 说明：
+> - `-n costing-parser` 表示虚拟环境名称叫 "costing-parser"
+> - `python=3.9` 指定 Python 版本为 3.9
+> - 成功激活后，终端前面会显示 `(costing-parser)` 字样
+
+**方法二：使用官方 Python venv（备选）**
 
 **Windows 用户：**
 ```bash
@@ -150,8 +169,13 @@ python test_my_pdf.py
 
 ### 常见问题（新手必看）
 
+**Q: 提示 "conda 不是内部或外部命令" 怎么办？**
+A: 说明 Anaconda 没有正确初始化，请尝试：
+   1. 重新打开 Anaconda Prompt（Windows）或终端
+   2. 手动运行 `conda init`，然后重启终端
+
 **Q: 提示 "python 不是内部或外部命令" 怎么办？**
-A: 说明 Python 没有添加到 PATH，请重新安装 Python 并勾选 "Add Python to PATH"。
+A: 如果你用的是 Anaconda，请确保已激活虚拟环境；如果用的是官方 Python，请重新安装并勾选 "Add Python to PATH"。
 
 **Q: 安装 PaddleOCR 很慢怎么办？**
 A: 使用国内镜像源加速：
@@ -160,14 +184,14 @@ pip install -e . -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
 **Q: 提示 "ModuleNotFoundError"？**
-A: 确保虚拟环境已激活（终端前有 `(venv)`），然后重新运行安装命令。
+A: 确保虚拟环境已激活（终端前有 `(costing-parser)` 或 `(venv)`），然后重新运行安装命令。
 
 **Q: Windows 下激活虚拟环境报错？**
-A: 打开 PowerShell（管理员），输入：
+A: 如果使用的是官方 Python venv，打开 PowerShell（管理员），输入：
 ```powershell
 Set-ExecutionPolicy RemoteSigned
 ```
-然后重新尝试激活。
+然后重新尝试激活。如果使用 Anaconda，建议使用 Anaconda Prompt。
 
 ## 支持的单据类型
 
