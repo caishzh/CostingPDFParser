@@ -40,6 +40,11 @@ os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "True")
 os.environ.setdefault("KMP_AFFINITY", "granularity=fine,compact,1,0")
 os.environ.setdefault("FLAGS_use_mkldnn", "False")
 os.environ.setdefault("FLAGS_use_ngraph", "False")
+os.environ.setdefault("FLAGS_allocator_strategy", "naive_best_fit")
+os.environ.setdefault("FLAGS_enable_onednn_ops", "False")
+os.environ.setdefault("FLAGS_enable_onednn", "False")
+os.environ.setdefault("FLAGS_onednn_ops_list", "")
+os.environ.setdefault("DNNL_VERBOSE", "0")
 
 from .parser import Parser
 

@@ -4,6 +4,9 @@ import sys
 
 os.environ["FLAGS_use_mkldnn"] = "False"
 os.environ["FLAGS_use_ngraph"] = "False"
+os.environ["FLAGS_enable_onednn_ops"] = "False"
+os.environ["FLAGS_enable_onednn"] = "False"
+os.environ["FLAGS_allocator_strategy"] = "naive_best_fit"
 
 from typing import Any, Dict, List
 
